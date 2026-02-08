@@ -1,0 +1,8 @@
+export { default as Location } from './Location'
+export { default as LocationDraft } from './Location.draft'
+export * from './Location'
+export * from './Location.types'
+export * from './Location.dto'
+export * from './Location.mapper'
+export * from './Location.api'
+export * from './Location.query'
