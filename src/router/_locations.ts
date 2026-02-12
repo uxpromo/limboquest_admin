@@ -9,6 +9,11 @@ const routes = [
     name: 'locations.create',
     component: () => import('@/pages/locations/create.vue'),
   },
+  {
+    path: '/locations/:id/edit',
+    name: 'locations.edit',
+    component: () => import('@/pages/locations/edit.vue'),
+  },
 ]
 
 export default routes

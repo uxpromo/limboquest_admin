@@ -36,6 +36,7 @@ import {
   PhDoorOpen,
   PhCalendarDots,
   PhTicket,
+  PhCurrencyCircleDollar,
 } from '@phosphor-icons/vue/compact'
 import { FMenu, type MenuItemValueType, type MenuElementType } from '@finzor-ui/menu'
 import { ref, computed } from 'vue'
@@ -67,9 +68,16 @@ const menuItems = computed<MenuElementType[]>(() => [
   },
   {
     type: 'item',
-    value: 'sessions.index',
+    value: 'quest_sessions.index',
     label: 'Сеансы',
     icon: PhCalendarDots,
+    visible: true,
+  },
+  {
+    type: 'item',
+    value: 'pricing_rules.index',
+    label: 'Правила цен',
+    icon: PhCurrencyCircleDollar,
     visible: true,
   },
   {

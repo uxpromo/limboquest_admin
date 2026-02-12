@@ -18,8 +18,6 @@
         v-model:value="coordinates"
         :center="mapOptions.center"
         :zoom="mapOptions.zoom"
-        style="height: 400px"
-        wide
         :disabled="false"
         :clearable="false"
         clear-btn-title="Очистить"
@@ -36,13 +34,13 @@
 
 <script setup lang="ts">
 import { LocationDraft } from '@/domains/location'
-import { ref, reactive, computed, useTemplateRef } from 'vue'
+import { ref, reactive, computed, useTemplateRef, watch } from 'vue'
 import { FForm, FFormItem, Rule, type FFormInstanceType } from '@finzor-ui/form'
 import FInput from '@finzor-ui/input'
 import FTextarea from '@finzor-ui/textarea'
 import FSwitch from '@finzor-ui/switch'
 import { FYandexMapCoordsPicker } from '@finzor-ui/yandex-map'
-import Location from '@/domains/location/Location'
+import Location from '@/domains/location/Location.model'
 
 const formState = ref<LocationDraft>(new LocationDraft())
 const formRef = useTemplateRef<FFormInstanceType>('formRef')
@@ -69,10 +67,22 @@ defineOptions({
 const props = withDefaults(
   defineProps<{
     loading: boolean
+    model?: Location | null
   }>(),
   {
     loading: false,
+    model: undefined,
   },
+)
+
+watch(
+  () => props.model,
+  (model) => {
+    if (model) {
+      formState.value = LocationDraft.fromModel(model)
+    }
+  },
+  { immediate: true },
 )
 
 const rules = {
@@ -107,7 +117,7 @@ const validate = async () => {
 }
 
 const setModel = (model: Location) => {
-  formState.value = new LocationDraft(model)
+  formState.value = LocationDraft.fromModel(model)
 }
 
 defineExpose({

@@ -38,3 +38,4 @@ __screenshots__/
 # Vite
 *.timestamp-*-*.mjs
 .npmrc
+settings.local.json

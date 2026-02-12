@@ -10,13 +10,28 @@
       <FCreateButton @click="handleCreateLocation">Новая локация</FCreateButton>
     </template>
 
-    <FTable
-      :loading="isLoading"
-      :columns="columns"
-      :data="data"
-      :bordered="false"
-      rowKey="id"
-    ></FTable>
+    <FTable :loading="isLoading" :columns="columns" :data="data" :bordered="false" rowKey="id">
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'is_active'">
+          <FTag :color="record.is_active ? 'success' : 'danger'">
+            {{ record.is_active ? 'Активна' : 'Неактивна' }}
+          </FTag>
+        </template>
+        <template v-else-if="column.key === 'actions'">
+          <FActionButtons
+            :asDropdown="false"
+            :delConfirm="false"
+            :showDelBtn="false"
+            showEditBtn
+            showViewBtn
+            size="default"
+            type="plain"
+            @edit="router.push({ name: 'locations.edit', params: { id: record.id } })"
+            @view="router.push({ name: 'locations.edit', params: { id: record.id } })"
+          />
+        </template>
+      </template>
+    </FTable>
   </FPage>
 </template>
 
@@ -26,8 +41,10 @@ import { FCreateButton } from '@finzor-ui/button'
 import { PhMapPinSimpleArea } from '@phosphor-icons/vue'
 import { useRouter } from 'vue-router'
 import { useLocationListQuery } from '@/domains/location/Location.query'
-import { FTable, type TableColumnType, type TableRecordType } from '@finzor-ui/table'
+import { FTable, type TableColumnType } from '@finzor-ui/table'
 import { FRefreshButton } from '@finzor-ui/button'
+import FActionButtons from '@finzor-ui/action-buttons'
+import FTag from '@finzor-ui/tag'
 
 defineOptions({
   name: 'LocationsIndex',
@@ -49,9 +66,15 @@ const columns: TableColumnType[] = [
     narrow: true,
   },
   {
+    key: 'address',
+    dataKey: 'address',
+    label: 'Адрес',
+    ellipsis: true,
+  },
+  {
     key: 'is_active',
     dataKey: 'is_active',
-    label: 'Активность',
+    label: 'Статус',
     narrow: true,
   },
   {
