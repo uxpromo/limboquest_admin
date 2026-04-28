@@ -1,0 +1,5 @@
+//npm.pkg.github.com/:_authToken=**************************
+@finzor-ui:registry=https://npm.pkg.github.com/
+shamefully-hoist=true
+# npm: pinia 2.x (pinia-orm) vs vue-router@5 optional peer pinia@^3 — avoid ERESOLVE
+legacy-peer-deps=true
