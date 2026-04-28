@@ -8,7 +8,8 @@
     <template #breadcrumbs>
       <FBreadcrumbs>
         <FBreadcrumbsItem href="/">Главная</FBreadcrumbsItem>
-        <FBreadcrumbsItem :to="{ name: 'pricing_rules.index' }">
+        <FBreadcrumbsItem :to="{ name: 'settings.index' }">Настройки</FBreadcrumbsItem>
+        <FBreadcrumbsItem :to="{ name: 'settings.pricing_rules.index' }">
           <template #icon>
             <PhCurrencyCircleDollar />
           </template>
@@ -34,7 +35,7 @@ import { FCreateButton } from '@finzor-ui/button'
 import { FBreadcrumbs, FBreadcrumbsItem } from '@finzor-ui/breadcrumbs'
 
 defineOptions({
-  name: 'PricingRulesCreate',
+  name: 'SettingsPricingRulesCreate',
 })
 
 const router = useRouter()
@@ -46,9 +47,9 @@ const handleCreate = async () => {
   if (result === false) return
   create(result, {
     onSuccess: (model) => {
-      router.push({ name: 'pricing_rules.edit', params: { id: model.id } })
+      router.push({ name: 'settings.pricing_rules.edit', params: { id: model.id } })
     },
-    onError: (e) => console.error('[PricingRulesCreate]', e),
+    onError: (e) => console.error('[SettingsPricingRulesCreate]', e),
   })
 }
 </script>

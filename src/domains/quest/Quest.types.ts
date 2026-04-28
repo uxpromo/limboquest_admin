@@ -15,6 +15,7 @@ export interface QuestDTO {
   full_description: string | null
   additional_info: string | null
   age_rating: string | null
+  age_rating_description: string | null
   is_visible: boolean
   is_in_dev: boolean
   opening_date_text: string | null

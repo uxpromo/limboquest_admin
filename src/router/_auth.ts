@@ -1,19 +1,23 @@
-const routes = [
-  {
-    path: "/auth",
-    meta: {
-      noAuth: true,
-    },
-    redirect: { name: "auth", params: { action: "login" } },
-  },
-  {
-    path: "/auth/:action(login|password-reset|password-request)",
-    name: "auth",
-    meta: {
-      noAuth: true,
-    },
-    component: () => import("@/pages/auth/index.vue"),
-  },
-];
+import { defineRoute, defineRoutes } from '@finzor-ui/layout'
 
-export default routes;
+const routes = defineRoutes([
+  defineRoute({
+    path: '/auth',
+    meta: {
+      allowGuest: true,
+      layout: 'auth',
+    },
+    redirect: { name: 'auth', params: { action: 'login' } },
+  }),
+  defineRoute({
+    path: '/auth/:action(login|password-reset|password-request)',
+    name: 'auth',
+    meta: {
+      allowGuest: true,
+      layout: 'auth',
+    },
+    component: () => import('@/pages/auth/index.vue'),
+  }),
+])
+
+export default routes

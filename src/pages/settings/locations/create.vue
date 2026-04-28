@@ -8,7 +8,8 @@
     <template #breadcrumbs>
       <FBreadcrumbs>
         <FBreadcrumbsItem href="/">Главная</FBreadcrumbsItem>
-        <FBreadcrumbsItem :to="{ name: 'locations.index' }">
+        <FBreadcrumbsItem :to="{ name: 'settings.index' }">Настройки</FBreadcrumbsItem>
+        <FBreadcrumbsItem :to="{ name: 'settings.locations.index' }">
           <template #icon>
             <PhMapPinSimpleArea />
           </template>
@@ -33,7 +34,7 @@ import { FCreateButton } from '@finzor-ui/button'
 import { FBreadcrumbs, FBreadcrumbsItem } from '@finzor-ui/breadcrumbs'
 
 defineOptions({
-  name: 'LocationsIndex',
+  name: 'SettingsLocationsCreate',
 })
 
 const locationFormRef = useTemplateRef<InstanceType<typeof LocationForm>>('locationFormRef')

@@ -1,12 +1,8 @@
 <template>
   <FForm :model="formState" ref="formRef" :rules="rules" :loading="props.loading">
     <FFormItem label="Сеанс" name="quest_session_id">
-      <FSelect
-        v-model:value="formState.quest_session_id"
-        wide
-        :options="questSessionOptions"
-        placeholder="Выберите сеанс"
-      />
+      <FSelect v-model:value="formState.quest_session_id" wide :options="questSessionOptions"
+        placeholder="Выберите сеанс" />
     </FFormItem>
     <FFormItem label="Имя" name="name">
       <FInput v-model:value="formState.name" wide />
@@ -21,12 +17,7 @@
       <FInput v-model:value="formState.players_count" type="number" wide :min="1" />
     </FFormItem>
     <FFormItem label="Статус" name="status">
-      <FSelect
-        v-model:value="formState.status"
-        wide
-        :options="statusOptions"
-        placeholder="Выберите статус"
-      />
+      <FSelect v-model:value="formState.status" wide :options="statusOptions" placeholder="Выберите статус" />
     </FFormItem>
     <FFormItem label="Код брони" name="booking_code">
       <FInput v-model:value="formState.booking_code" wide />
@@ -76,11 +67,11 @@ const questSessionOptions = computed(() => {
 })
 
 const statusOptions = [
-  { label: 'Ожидание', value: 'pending' },
+  { label: 'Новая заявка', value: 'pending' },
   { label: 'Подтверждено', value: 'confirmed' },
   { label: 'Отменено', value: 'cancelled' },
   { label: 'Завершено', value: 'completed' },
-  { label: 'Неявка', value: 'absent' },
+  { label: 'Неявка без уведомления', value: 'absent' },
 ]
 
 defineOptions({

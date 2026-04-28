@@ -8,9 +8,9 @@ export default class QuestDraft {
   slug: string | null = null
   title: string | null = null
   subtitle: string | null = null
-  playtime: number | null = null
-  players_min: number | null = null
-  players_max: number | null = null
+  playtime: number | null = 60
+  players_min: number | null = 2
+  players_max: number | null = 6
   players_base_limit: number | null = null
   surcharge_price: number | null = null
   base_price: number | null = null
@@ -19,17 +19,18 @@ export default class QuestDraft {
   full_description: string | null = null
   additional_info: string | null = null
   age_rating: string | null = null
+  age_rating_description: string | null = null
   is_visible: boolean = false
   is_in_dev: boolean = false
   opening_date_text: string | null = null
   average_time: number | null = null
-  is_auto_average_time: boolean = false
+  is_auto_average_time: boolean = true
   passability: number | null = null
-  is_auto_passability: boolean = false
+  is_auto_passability: boolean = true
   best_time: number | null = null
-  is_auto_best_time: boolean = false
-  difficulty_level: number | null = null
-  scariness_level: number | null = null
+  is_auto_best_time: boolean = true
+  difficulty_level: number | null = 3
+  scariness_level: number | null = 3
   is_bookable: boolean = true
   sort: number | null = null
 
@@ -50,6 +51,7 @@ export default class QuestDraft {
       this.full_description = model.full_description
       this.additional_info = model.additional_info
       this.age_rating = model.age_rating
+      this.age_rating_description = model.age_rating_description
       this.is_visible = model.is_visible
       this.is_in_dev = model.is_in_dev
       this.opening_date_text = model.opening_date_text

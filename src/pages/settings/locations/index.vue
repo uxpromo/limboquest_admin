@@ -26,8 +26,8 @@
             showViewBtn
             size="default"
             type="plain"
-            @edit="router.push({ name: 'locations.edit', params: { id: record.id } })"
-            @view="router.push({ name: 'locations.edit', params: { id: record.id } })"
+            @edit="router.push({ name: 'settings.locations.edit', params: { id: record.id } })"
+            @view="router.push({ name: 'settings.locations.edit', params: { id: record.id } })"
           />
         </template>
       </template>
@@ -47,7 +47,7 @@ import FActionButtons from '@finzor-ui/action-buttons'
 import FTag from '@finzor-ui/tag'
 
 defineOptions({
-  name: 'LocationsIndex',
+  name: 'SettingsLocationsIndex',
 })
 
 const router = useRouter()
@@ -55,7 +55,7 @@ const router = useRouter()
 const { isLoading, isFetching, refetch, data } = useLocationListQuery()
 
 const handleCreateLocation = () => {
-  router.push({ name: 'locations.create' })
+  router.push({ name: 'settings.locations.create' })
 }
 
 const columns: TableColumnType[] = [

@@ -26,8 +26,8 @@
             showViewBtn
             size="default"
             type="plain"
-            @edit="router.push({ name: 'pricing_rules.edit', params: { id: record.id } })"
-            @view="router.push({ name: 'pricing_rules.edit', params: { id: record.id } })"
+            @edit="router.push({ name: 'settings.pricing_rules.edit', params: { id: record.id } })"
+            @view="router.push({ name: 'settings.pricing_rules.edit', params: { id: record.id } })"
           />
         </template>
       </template>
@@ -46,14 +46,14 @@ import FActionButtons from '@finzor-ui/action-buttons'
 import FTag from '@finzor-ui/tag'
 
 defineOptions({
-  name: 'PricingRulesIndex',
+  name: 'SettingsPricingRulesIndex',
 })
 
 const router = useRouter()
 const { isLoading, isFetching, refetch, data } = usePricingRuleListQuery()
 
 const handleCreate = () => {
-  router.push({ name: 'pricing_rules.create' })
+  router.push({ name: 'settings.pricing_rules.create' })
 }
 
 const columns: TableColumnType[] = [

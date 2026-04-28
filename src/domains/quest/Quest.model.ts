@@ -19,6 +19,7 @@ export default class Quest {
   readonly full_description!: string | null
   readonly additional_info!: string | null
   readonly age_rating!: string | null
+  readonly age_rating_description!: string | null
   readonly is_visible!: boolean
   readonly is_in_dev!: boolean
   readonly opening_date_text!: string | null
@@ -52,6 +53,7 @@ export default class Quest {
     this.full_description = dto.full_description
     this.additional_info = dto.additional_info
     this.age_rating = dto.age_rating
+    this.age_rating_description = dto.age_rating_description
     this.is_visible = dto.is_visible
     this.is_in_dev = dto.is_in_dev
     this.opening_date_text = dto.opening_date_text

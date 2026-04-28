@@ -8,7 +8,8 @@
     <template #breadcrumbs>
       <FBreadcrumbs>
         <FBreadcrumbsItem href="/">Главная</FBreadcrumbsItem>
-        <FBreadcrumbsItem :to="{ name: 'locations.index' }">
+        <FBreadcrumbsItem :to="{ name: 'settings.index' }">Настройки</FBreadcrumbsItem>
+        <FBreadcrumbsItem :to="{ name: 'settings.locations.index' }">
           <template #icon>
             <PhMapPinSimpleArea />
           </template>
@@ -36,7 +37,7 @@ import { FCreateButton } from '@finzor-ui/button'
 import { FBreadcrumbs, FBreadcrumbsItem } from '@finzor-ui/breadcrumbs'
 
 defineOptions({
-  name: 'LocationsEdit',
+  name: 'SettingsLocationsEdit',
 })
 
 const route = useRoute()
@@ -63,7 +64,7 @@ const handleUpdateLocation = async () => {
         // Mutation success handled by cache invalidation
       },
       onError: (error) => {
-        console.error('[LocationsEdit] Update failed:', { id: id.value, error })
+        console.error('[SettingsLocationsEdit] Update failed:', { id: id.value, error })
       },
     },
   )

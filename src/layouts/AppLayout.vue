@@ -1,48 +1,98 @@
 <template>
-  <FAppLayout class="app-layout" loading>
-    <template #header-logo="layoutContext">
-      <Logo :show-text="!layoutContext.layoutState.sidebarCollapsed" />
-    </template>
-    <template #header-content>
-      <FSpace wide>
-        <div style="flex-grow: 1"></div>
-        <FSpace gap="8px" align="center">
-          <CurrentUserBlock />
-        </FSpace>
-      </FSpace>
-    </template>
-    <template #sidebar="layoutContext">
-      <FMenu
-        :items="menuItems"
-        :collapsed="layoutContext.isDesktop && layoutContext.layoutState.sidebarCollapsed"
-        vertical
-        v-model:activeValues="activeMenuValues"
-        @select="handleSelect"
-      />
-    </template>
+  <FLayout class="app-layout" ref="layoutRef" :mobileTopbar="false">
+    <FLayoutHeader class="app-layout__header">
+      <section
+        class="app-layout__header-left"
+        :class="{ 'app-layout__header-left--collapsed': isMobile || isLeftSidebarColumnCollapsed }"
+      >
+        <Logo :show-text="!isLeftSidebarColumnCollapsed" />
+        <FLayoutSidebarToggleButton v-if="isDesktop && !isLeftSidebarColumnCollapsed" side="left" :size="24" />
+      </section>
+      <div class="app-layout__header-right">
+        <FLayoutSidebarToggleButton
+          v-if="isMobile || (isDesktop && isLeftSidebarColumnCollapsed)"
+          side="left"
+          :size="24"
+        />
+        <div style="flex: 1"></div>
+        <CurrentUserBlock v-if="isDesktop" />
+      </div>
+    </FLayoutHeader>
 
-    <slot></slot>
-  </FAppLayout>
+    <FLayoutSidebar side="left" class="app-layout__sidebar" :bordered="false">
+      <template v-if="isDesktop">
+        <FMenu
+          class="fh-m-3"
+          :items="menuItems"
+          :collapsed="isDesktop && isLeftSidebarColumnCollapsed"
+          activation-strategy="manual"
+          :activation-callback="activationCallback"
+          vertical
+          @select="handleSelect"
+        />
+      </template>
+      <template v-else>
+        <FLayout style="height: 100dvh">
+          <FLayoutContent class="fh-p-3">
+            <FMenu
+              :items="menuItems"
+              :collapsed="false"
+              activation-strategy="manual"
+              :activation-callback="activationCallback"
+              vertical
+              @select="handleSelect"
+            />
+          </FLayoutContent>
+          <FLayoutFooter>
+            <CurrentUserBlock />
+          </FLayoutFooter>
+        </FLayout>
+      </template>
+    </FLayoutSidebar>
+
+    <FLayoutContent class="app-layout__content">
+      <slot />
+    </FLayoutContent>
+  </FLayout>
 </template>
 
 <script setup lang="ts">
 import Logo from '@/components/identity/Logo.vue'
 import CurrentUserBlock from '@/components/users/CurrentUserBlock.vue'
-import FAppLayout from '@finzor-ui/layout'
-import FSpace from '@finzor-ui/space'
 import {
-  PhMapPinSimpleArea,
   PhSpeedometer,
   PhDoorOpen,
   PhCalendarDots,
   PhTicket,
-  PhCurrencyCircleDollar,
+  PhGear,
 } from '@phosphor-icons/vue/compact'
-import { FMenu, type MenuItemValueType, type MenuElementType } from '@finzor-ui/menu'
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import {
+  FMenu,
+  type MenuItemValueType,
+  type MenuElementType,
+  type MenuActivatableElementType,
+} from '@finzor-ui/menu'
+import { computed, useTemplateRef } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import {
+  FLayout,
+  FLayoutHeader,
+  FLayoutSidebar,
+  FLayoutContent,
+  FLayoutSidebarToggleButton,
+  FLayoutFooter,
+  type LayoutStateType,
+} from '@finzor-ui/layout'
 
 const router = useRouter()
+const route = useRoute()
+const layoutRef = useTemplateRef<InstanceType<typeof FLayout>>('layoutRef')
+const layoutState = computed<LayoutStateType | undefined>(() => layoutRef.value?.getLayoutState())
+const isDesktop = computed(() => layoutState.value?.isDesktop.value ?? true)
+const isMobile = computed(() => !isDesktop.value)
+const isLeftSidebarColumnCollapsed = computed(
+  () => layoutState.value?.sidebar_left.isSidebarCollapsed.value ?? false,
+)
 
 const menuItems = computed<MenuElementType[]>(() => [
   {
@@ -50,13 +100,6 @@ const menuItems = computed<MenuElementType[]>(() => [
     value: 'dashboard.index',
     label: 'Пульт',
     icon: PhSpeedometer,
-    visible: true,
-  },
-  {
-    type: 'item',
-    value: 'locations.index',
-    label: 'Локации',
-    icon: PhMapPinSimpleArea,
     visible: true,
   },
   {
@@ -75,21 +118,29 @@ const menuItems = computed<MenuElementType[]>(() => [
   },
   {
     type: 'item',
-    value: 'pricing_rules.index',
-    label: 'Правила цен',
-    icon: PhCurrencyCircleDollar,
-    visible: true,
-  },
-  {
-    type: 'item',
     value: 'bookings.index',
     label: 'Заявки',
     icon: PhTicket,
     visible: true,
   },
+  {
+    type: 'item',
+    value: 'settings.index',
+    label: 'Настройки',
+    icon: PhGear,
+    visible: true,
+  },
 ])
 
-const activeMenuValues = ref<MenuItemValueType[]>([])
+const currentFirstPathSegment = computed(() => route.path.split('/').filter(Boolean)[0] ?? '')
+
+const activationCallback = (item: MenuActivatableElementType) => {
+  const routeName = String(item.value)
+  const resolvedPath = router.resolve({ name: routeName }).path
+  const expectedSegment = resolvedPath.split('/').filter(Boolean)[0] ?? ''
+
+  return expectedSegment === currentFirstPathSegment.value
+}
 
 const handleSelect = (value: MenuItemValueType) => {
   router.push({ name: value as string })
@@ -98,58 +149,43 @@ const handleSelect = (value: MenuItemValueType) => {
 
 <style lang="scss">
 .app-layout {
-  --f-app-layout--header-background-color: var(--f-color-slate-800);
-  --f-app-layout--main-background-color: var(--f-color-neutral-100);
+  --f-layout-header--height: 64px;
+  --f-layout--height: 100dvh;
+  --f-layout--sidebar-width-expanded: 260px;
+  --f-layout--sidebar-width-collapsed: 64px;
+  --app-layout--sidebar-bg-color: var(--f-color-zinc-800);
+  --app-layout--header-left--bg-color: var(--f-color-zinc-900);
 
-  .f-app-layout-header {
-    border-bottom-color: var(--f-color-slate-700);
+  &__header-right {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    gap: var(--f-space-4);
+    padding: 0 var(--f-space-4);
+    align-items: center;
+  }
 
-    &__content {
-      width: 100%;
-    }
+  &__header-left {
+    width: var(--f-layout--sidebar-width-expanded);
+    background-color: var(--app-layout--header-left--bg-color);
+    height: var(--f-layout-header--height);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--f-space-4);
+    padding: 0 var(--f-space-4);
+    align-items: center;
+    transition: width var(--f-layout--sidebar-transition-duration) var(--f-layout--sidebar-transition-easing);
 
-    &__logo {
-      .logo {
-        &__symbol {
-          height: 42px;
-          width: auto;
-        }
-        &__text {
-          height: 26px;
-          width: auto;
-        }
-      }
-    }
-
-    &__logo_container {
-      border-right-color: var(--f-color-slate-700);
-      padding: 0 var(--f-space-3);
+    &--collapsed {
+      width: var(--f-layout--sidebar-width-collapsed);
     }
   }
 
-  .f-app-layout-sidebar {
-    &__content {
-      padding: var(--f-space-3);
-    }
+  &__sidebar {
+    --f-layout-sidebar--bg-color: var(--app-layout--sidebar-bg-color);
+    --f-menu--item--label-color: var(--f-color-zinc-300);
+    --f-menu--item--active--label-color: var(--f-color-primary);
+    --f-menu--item--hover--bg-color: var(--f-color-zinc-50-alpha);
   }
-
-  .f-page-header {
-    border-bottom: 1px solid var(--f-color-secondary-200);
-
-    &__title-wrapper {
-      max-width: 90%;
-    }
-  }
-
-  .f-current-user-block {
-    --f-current-user-block--bg-color: transparent;
-    --f-current-user-block--padding: 4px 4px 4px 8px;
-
-    //gap: var(--f-current-user-block--gap);
-  }
-}
-
-.fh-w-100 {
-  width: 100%;
 }
 </style>
