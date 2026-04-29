@@ -2,162 +2,174 @@
   <FForm :model="formState" ref="formRef" :rules="rules" :loading="props.loading" class="quest-form">
     <FRow :gap="16" containerQuery>
       <FCol :cols="{ xs: 12, md: 8 }">
-
-        <FFormItem label="Название" name="title">
-          <FInput v-model:value="formState.title" wide />
-        </FFormItem>
-        <FFormItem label="Подзаголовок" name="subtitle">
-          <FInput v-model:value="formState.subtitle" wide />
-        </FFormItem>
-        <FFormItem label="Системное имя" name="slug">
-          <FInput v-model:value="formState.slug" wide />
-        </FFormItem>
-        <FFormItem label="Локация" name="location_id">
-          <FSelect v-model:value="formState.location_id" wide :options="locationOptions" placeholder="Выберите локацию"
-            allow-clear />
-        </FFormItem>
-        <FFormItem label="Краткое описание" name="short_description">
-          <FRichEditor v-model:value="formState.short_description" placeholder="Введите текст..."
-            toolbar-commands="standard" />
-
-        </FFormItem>
-        <FFormItem label="Полное описание" name="full_description">
-          <FRichEditor v-model:value="formState.full_description" placeholder="Введите текст..."
-            toolbar-commands="standard" />
-        </FFormItem>
-        <FFormItem label="Доп. информация" name="additional_info">
-          <FRichEditor v-model:value="formState.additional_info" placeholder="Введите текст..."
-            toolbar-commands="standard" />
-        </FFormItem>
-        <FFormItem label="Возрастной рейтинг" name="age_rating">
-          <FInput v-model:value="formState.age_rating" wide />
-        </FFormItem>
-        <FFormItem label="Подробный возрастной допуск" name="age_rating_description">
-          <FRichEditor v-model:value="formState.age_rating_description" placeholder="Введите текст..."
-            toolbar-commands="standard" />
-        </FFormItem>
-
-
-        <FFormItem label="Время прохождения (мин)" name="playtime">
-          <FInput v-model:value="formState.playtime" type="number" wide :min="0" />
-        </FFormItem>
-
-        <FFormItem label="Уровень сложности" name="difficulty_level">
-          <FSegmentedSelect v-model:value="formState.difficulty_level" :options="difficultyLevelOptions" />
-        </FFormItem>
-        <FFormItem label="Уровень страха" name="scariness_level">
-          <FSegmentedSelect v-model:value="formState.scariness_level" :options="scarinessLevelOptions" />
-        </FFormItem>
-
-        <h4>Ценообразование</h4>
-        <FFields class="fh-mb-4">
-          <FFieldsItem label="Количество игроков">
-            <FFormItem :name="['players_min', 'players_max']">
-              <FSpace compact>
-                <FInput v-model:value="formState.players_min" type="number" wide :min="0" placeholder="Минимум">
-                  <template #prepend>От</template>
-                </FInput>
-                <FInput v-model:value="formState.players_max" type="number" wide :min="0" placeholder="Максимум">
-                  <template #prepend>До</template>
-                </FInput>
-              </FSpace>
+        <FTabs v-model:active-key="activeTabKey">
+          <FTab tab-key="main" label="Основное">
+            <FFormItem label="Название" name="title">
+              <FInput v-model:value="formState.title" wide />
             </FFormItem>
-          </FFieldsItem>
-          <FFieldsItem label="Базовая цена">
-            <FFormItem name="base_price">
-              <FInput v-model:value="formState.base_price" type="number" wide :min="0">
-                <template #append>₽</template>
-              </FInput>
+            <FFormItem label="Подзаголовок" name="subtitle">
+              <FInput v-model:value="formState.subtitle" wide />
             </FFormItem>
-          </FFieldsItem>
-          <FFieldsItem label="Количество игроков для базовой цены">
-            <FFormItem name="players_base_limit">
-              <FInput v-model:value="formState.players_base_limit" type="number" wide :min="0" />
+            <FFormItem label="Системное имя" name="slug">
+              <FInput v-model:value="formState.slug" wide />
             </FFormItem>
-          </FFieldsItem>
-          <FFieldsItem label="Надбавка за дополнительного игрока">
-            <FFormItem name="surcharge_price">
-              <FInput v-model:value="formState.surcharge_price" type="number" wide :min="0">
-                <template #append>₽</template>
-              </FInput>
+            <FFormItem label="Локация" name="location_id">
+              <FSelect v-model:value="formState.location_id" wide :options="locationOptions"
+                placeholder="Выберите локацию" allow-clear />
             </FFormItem>
-          </FFieldsItem>
-        </FFields>
+            <FFormItem label="Краткое описание" name="short_description">
+              <FRichEditor v-model:value="formState.short_description" placeholder="Введите текст..."
+                toolbar-commands="standard" />
+
+            </FFormItem>
+            <FFormItem label="Полное описание" name="full_description">
+              <FRichEditor v-model:value="formState.full_description" placeholder="Введите текст..."
+                toolbar-commands="standard" />
+            </FFormItem>
+            <FFormItem label="Доп. информация" name="additional_info">
+              <FRichEditor v-model:value="formState.additional_info" placeholder="Введите текст..."
+                toolbar-commands="standard" />
+            </FFormItem>
+            <FFormItem label="Возрастной рейтинг" name="age_rating">
+              <FInput v-model:value="formState.age_rating" wide />
+            </FFormItem>
+            <FFormItem label="Подробный возрастной допуск" name="age_rating_description">
+              <FRichEditor v-model:value="formState.age_rating_description" placeholder="Введите текст..."
+                toolbar-commands="standard" />
+            </FFormItem>
 
 
-        <h4>Статистика</h4>
-        <FFields class="fh-mb-4">
-          <FFieldsItem label="Среднее время">
-            <FFormItem :name="['is_auto_average_time', 'average_time']">
-              <FSwitch v-model:checked="formState.is_auto_average_time"
-                label="Автоматически рассчитывать среднее время" />
-              <FTransitionCollapse>
-                <div v-if="!formState.is_auto_average_time">
-                  <FInput v-model:value="formState.average_time" type="number" wide :min="0"
-                    placeholder="Среднее время">
-                    <template #append>Секунд</template>
+            <FFormItem label="Время прохождения (мин)" name="playtime">
+              <FInput v-model:value="formState.playtime" type="number" wide :min="0" />
+            </FFormItem>
+
+            <FFormItem label="Уровень сложности" name="difficulty_level">
+              <FSegmentedSelect v-model:value="formState.difficulty_level" :options="difficultyLevelOptions" />
+            </FFormItem>
+            <FFormItem label="Уровень страха" name="scariness_level">
+              <ScarinessLevelInput v-model:value="formState.scariness_level" />
+            </FFormItem>
+
+            <h4>Ценообразование</h4>
+            <FFields class="fh-mb-4">
+              <FFieldsItem label="Количество игроков">
+                <FFormItem :name="['players_min', 'players_max']">
+                  <FSpace compact>
+                    <FInput v-model:value="formState.players_min" type="number" wide :min="0" placeholder="Минимум">
+                      <template #prepend>От</template>
+                    </FInput>
+                    <FInput v-model:value="formState.players_max" type="number" wide :min="0" placeholder="Максимум">
+                      <template #prepend>До</template>
+                    </FInput>
+                  </FSpace>
+                </FFormItem>
+              </FFieldsItem>
+              <FFieldsItem label="Базовая цена">
+                <FFormItem name="base_price">
+                  <FInput v-model:value="formState.base_price" type="number" wide :min="0">
+                    <template #append>₽</template>
                   </FInput>
-                </div>
-              </FTransitionCollapse>
-            </FFormItem>
-          </FFieldsItem>
-
-          <FFieldsItem label="Лучшее время">
-            <FFormItem :name="['is_auto_best_time', 'best_time']">
-              <FSwitch v-model:checked="formState.is_auto_best_time" label="Автоматически рассчитывать лучшее время" />
-              <FTransitionCollapse>
-                <div v-if="!formState.is_auto_best_time">
-                  <FInput v-model:value="formState.best_time" type="number" wide :min="0" placeholder="Лучшее время">
-                    <template #append>Секунд</template>
+                </FFormItem>
+              </FFieldsItem>
+              <FFieldsItem label="Количество игроков для базовой цены">
+                <FFormItem name="players_base_limit">
+                  <FInput v-model:value="formState.players_base_limit" type="number" wide :min="0" />
+                </FFormItem>
+              </FFieldsItem>
+              <FFieldsItem label="Надбавка за дополнительного игрока">
+                <FFormItem name="surcharge_price">
+                  <FInput v-model:value="formState.surcharge_price" type="number" wide :min="0">
+                    <template #append>₽</template>
                   </FInput>
-                </div>
-              </FTransitionCollapse>
-            </FFormItem>
-
-          </FFieldsItem>
-          <FFieldsItem label="Проходимость">
-            <FFormItem :name="['is_auto_passability', 'passability']">
-              <FSwitch v-model:checked="formState.is_auto_passability"
-                label="Автоматически рассчитывать проходимость" />
-              <FTransitionCollapse>
-                <div v-if="!formState.is_auto_passability">
-                  <FInput v-model:value="formState.passability" type="number" wide :min="0" placeholder="Проходимость">
-                    <template #append>%</template>
-                  </FInput>
-                </div>
-              </FTransitionCollapse>
-            </FFormItem>
-          </FFieldsItem>
-        </FFields>
+                </FFormItem>
+              </FFieldsItem>
+            </FFields>
 
 
-        <h4>Состояние</h4>
-        <FFields class="fh-mb-4">
-          <FFieldsItem label="В разработке">
-            <FFormItem name="is_in_dev">
-              <FSwitch v-model:checked="formState.is_in_dev" />
-            </FFormItem>
-          </FFieldsItem>
-          <FFieldsItem label="Отображать на сайте">
-            <FFormItem name="is_visible">
-              <FSwitch v-model:checked="formState.is_visible" />
-            </FFormItem>
-          </FFieldsItem>
-          <FFieldsItem label="Доступен для бронирования">
-            <FFormItem name="is_bookable">
-              <FSwitch v-model:checked="formState.is_bookable" />
-            </FFormItem>
-          </FFieldsItem>
-        </FFields>
+            <h4>Статистика</h4>
+            <FFields class="fh-mb-4">
+              <FFieldsItem label="Среднее время">
+                <FFormItem :name="['is_auto_average_time', 'average_time']">
+                  <FSwitch v-model:checked="formState.is_auto_average_time"
+                    label="Автоматически рассчитывать среднее время" />
+                  <FTransitionCollapse>
+                    <div v-if="!formState.is_auto_average_time">
+                      <FInput v-model:value="formState.average_time" type="number" wide :min="0"
+                        placeholder="Среднее время">
+                        <template #append>Секунд</template>
+                      </FInput>
+                    </div>
+                  </FTransitionCollapse>
+                </FFormItem>
+              </FFieldsItem>
 
-        <FFormItem label="Текст даты открытия" name="opening_date_text">
-          <FInput v-model:value="formState.opening_date_text" wide />
-        </FFormItem>
+              <FFieldsItem label="Лучшее время">
+                <FFormItem :name="['is_auto_best_time', 'best_time']">
+                  <FSwitch v-model:checked="formState.is_auto_best_time"
+                    label="Автоматически рассчитывать лучшее время" />
+                  <FTransitionCollapse>
+                    <div v-if="!formState.is_auto_best_time">
+                      <FInput v-model:value="formState.best_time" type="number" wide :min="0"
+                        placeholder="Лучшее время">
+                        <template #append>Секунд</template>
+                      </FInput>
+                    </div>
+                  </FTransitionCollapse>
+                </FFormItem>
 
-        <FFormItem label="Сортировка" name="sort">
-          <FInput v-model:value="formState.sort" type="number" wide :min="0"
-            placeholder="Пустое значение поместит в конец списка" />
-        </FFormItem>
+              </FFieldsItem>
+              <FFieldsItem label="Проходимость">
+                <FFormItem :name="['is_auto_passability', 'passability']">
+                  <FSwitch v-model:checked="formState.is_auto_passability"
+                    label="Автоматически рассчитывать проходимость" />
+                  <FTransitionCollapse>
+                    <div v-if="!formState.is_auto_passability">
+                      <FInput v-model:value="formState.passability" type="number" wide :min="0"
+                        placeholder="Проходимость">
+                        <template #append>%</template>
+                      </FInput>
+                    </div>
+                  </FTransitionCollapse>
+                </FFormItem>
+              </FFieldsItem>
+            </FFields>
+
+
+            <h4>Состояние</h4>
+            <FFields class="fh-mb-4">
+              <FFieldsItem label="В разработке">
+                <FFormItem name="is_in_dev">
+                  <FSwitch v-model:checked="formState.is_in_dev" />
+                </FFormItem>
+              </FFieldsItem>
+              <FFieldsItem label="Отображать на сайте">
+                <FFormItem name="is_visible">
+                  <FSwitch v-model:checked="formState.is_visible" />
+                </FFormItem>
+              </FFieldsItem>
+              <FFieldsItem label="Доступен для бронирования">
+                <FFormItem name="is_bookable">
+                  <FSwitch v-model:checked="formState.is_bookable" />
+                </FFormItem>
+              </FFieldsItem>
+            </FFields>
+
+            <FFormItem label="Текст даты открытия" name="opening_date_text">
+              <FInput v-model:value="formState.opening_date_text" wide />
+            </FFormItem>
+
+            <FFormItem label="Сортировка" name="sort">
+              <FInput v-model:value="formState.sort" type="number" wide :min="0"
+                placeholder="Пустое значение поместит в конец списка" />
+            </FFormItem>
+          </FTab>
+          <FTab tab-key="images" label="Изображения" :disabled="isCreateMode">
+            Tab 2 content
+          </FTab>
+        </FTabs>
+
+
+
       </FCol>
       <FCol :cols="{ xs: 12, md: 4 }">
         <QuestCard class="quest-form__quest-card" :quest="formState" />
@@ -172,6 +184,7 @@
 import { QuestDraft } from '@/domains/quest'
 import { ref, useTemplateRef, watch, computed } from 'vue'
 import { FForm, FFormItem, Rule, type FFormInstanceType } from '@finzor-ui/form'
+import ScarinessLevelInput from '@/components/quests/ScarinessLevelInput.vue'
 import FInput from '@finzor-ui/input'
 import { FRow, FCol } from '@finzor-ui/grid'
 import FSwitch from '@finzor-ui/switch'
@@ -184,10 +197,11 @@ import type Quest from '@/domains/quest/Quest.model'
 import { useLocationListQuery } from '@/domains/location'
 import QuestCard from './QuestCard.vue'
 import { FTransitionCollapse } from '@finzor-ui/transitions'
+import { FTabs, FTab } from '@finzor-ui/tabs'
 
 const formState = ref<QuestDraft>(new QuestDraft())
 const formRef = useTemplateRef<FFormInstanceType>('formRef')
-
+const activeTabKey = ref('main')
 const { data: locationsData } = useLocationListQuery()
 const locationOptions = computed(() => {
   const list = locationsData.value ?? []
@@ -305,17 +319,15 @@ const difficultyLevelOptions = [
   { label: '5', value: 5 },
 ]
 
-const scarinessLevelOptions = [
-  { label: '1', value: 1 },
-  { label: '2', value: 2 },
-  { label: '3', value: 3 },
-  { label: '4', value: 4 },
-  { label: '5', value: 5 },
-]
+
 
 const setModel = (model: Quest) => {
   formState.value = QuestDraft.fromModel(model)
 }
+
+const isCreateMode = computed(() => {
+  return props.model == null
+})
 
 defineExpose({
   validate,

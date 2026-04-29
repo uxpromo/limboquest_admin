@@ -49,6 +49,9 @@ import quests from '@/router/_quests'
 import sessions from '@/router/_sessions'
 import bookings from '@/router/_bookings'
 import settings from '@/router/_settings'
+import analytics from '@/router/_analytics'
+import incidents from '@/router/_incidents'
+import tasks from '@/router/_tasks'
 import { defineRoute, defineRoutes, type AppRouteRecordRawType } from '@finzor-ui/layout'
 
 const routes = defineRoutes([
@@ -64,6 +67,9 @@ const routes = defineRoutes([
     ...sessions,
     ...bookings,
     ...settings,
+    ...analytics,
+    ...incidents,
+    ...tasks,
 ]) satisfies readonly AppRouteRecordRawType[]
 
 const router = createRouter({

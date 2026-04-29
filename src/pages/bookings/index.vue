@@ -80,7 +80,6 @@ function statusColor(status: string): string {
 
 const columns: TableColumnType[] = [
   { key: 'id', dataKey: 'id', label: 'ID', narrow: true },
-  { key: 'booking_code', dataKey: 'booking_code', label: 'Код', narrow: true },
   { key: 'name', dataKey: 'name', label: 'Имя', ellipsis: true },
   { key: 'phone', dataKey: 'phone', label: 'Телефон', narrow: true },
   { key: 'quest_session_id', dataKey: 'quest_session_id', label: 'Сеанс', narrow: true },

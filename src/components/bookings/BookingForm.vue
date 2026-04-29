@@ -17,19 +17,16 @@
       <FInput v-model:value="formState.players_count" type="number" wide :min="1" />
     </FFormItem>
     <FFormItem label="Статус" name="status">
-      <FSelect v-model:value="formState.status" wide :options="statusOptions" placeholder="Выберите статус" />
-    </FFormItem>
-    <FFormItem label="Код брони" name="booking_code">
-      <FInput v-model:value="formState.booking_code" wide />
+      <BookingStatusSelector v-model:value="formState.status" />
     </FFormItem>
     <FFormItem label="Итого (₽)" name="total_price">
-      <FInput v-model:value="formState.total_price" type="number" wide :min="0" />
+      <MoneyInput v-model:value="formState.total_price" :min="0" wide />
     </FFormItem>
     <FFormItem label="Оплачено (₽)" name="paid_amount">
-      <FInput v-model:value="formState.paid_amount" type="number" wide :min="0" />
+      <MoneyInput v-model:value="formState.paid_amount" :min="0" wide />
     </FFormItem>
     <FFormItem label="Скидка (₽)" name="manual_discount">
-      <FInput v-model:value="formState.manual_discount" type="number" wide :min="0" />
+      <MoneyInput v-model:value="formState.manual_discount" :min="0" wide />
     </FFormItem>
     <FFormItem label="Причина скидки" name="manual_discount_reason">
       <FInput v-model:value="formState.manual_discount_reason" wide />
@@ -41,18 +38,16 @@
 </template>
 
 <script setup lang="ts">
-import { BookingDraft } from '@/domains/booking'
-import { ref, useTemplateRef, watch, computed, onMounted } from 'vue'
+import { BOOKING_STATUS_DEFAULT, BookingDraft } from '@/domains/booking'
+import { ref, useTemplateRef, watch, computed } from 'vue'
 import { FForm, FFormItem, Rule, type FFormInstanceType } from '@finzor-ui/form'
 import FInput from '@finzor-ui/input'
 import FTextarea from '@finzor-ui/textarea'
-import FSelect from '@finzor-ui/select'
+import BookingStatusSelector from './BookingStatusSelector.vue'
+import MoneyInput from '../common/MoneyInput.vue'
 import type Booking from '@/domains/booking/Booking.model'
 import { useQuestSessionListQuery } from '@/domains/quest_session'
-
-function generateBookingCode(): string {
-  return `BK${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 6).toUpperCase()}`
-}
+import FSelect from '@finzor-ui/select'
 
 const formState = ref<BookingDraft>(new BookingDraft())
 const formRef = useTemplateRef<FFormInstanceType>('formRef')
@@ -65,14 +60,6 @@ const questSessionOptions = computed(() => {
     value: s.id,
   }))
 })
-
-const statusOptions = [
-  { label: 'Новая заявка', value: 'pending' },
-  { label: 'Подтверждено', value: 'confirmed' },
-  { label: 'Отменено', value: 'cancelled' },
-  { label: 'Завершено', value: 'completed' },
-  { label: 'Неявка без уведомления', value: 'absent' },
-]
 
 defineOptions({
   name: 'BookingForm',
@@ -88,12 +75,6 @@ const props = withDefaults(
     model: undefined,
   },
 )
-
-onMounted(() => {
-  if (!props.model && !formState.value.booking_code) {
-    formState.value.booking_code = generateBookingCode()
-  }
-})
 
 watch(
   () => props.model,
@@ -134,7 +115,6 @@ const rules = {
     message: 'Введите число игроков (от 1)',
   }),
   status: Rule.string('Выберите статус').required('Статус обязателен'),
-  booking_code: Rule.string('Введите код брони').required('Код брони обязателен'),
   total_price: Rule.custom({
     fn: (value) => {
       if (value === null || value === undefined || value === '') return false
@@ -158,7 +138,7 @@ const validate = async () => {
     phone: d.phone ?? '',
     email: d.email || null,
     players_count: d.players_count ?? 1,
-    status: d.status ?? 'pending',
+    status: d.status ?? BOOKING_STATUS_DEFAULT,
     source_id: d.source_id || null,
     pricing_snapshot: d.pricing_snapshot ?? null,
     total_price: d.total_price ?? 0,
@@ -166,7 +146,6 @@ const validate = async () => {
     manual_discount: d.manual_discount ?? 0,
     manual_discount_reason: d.manual_discount_reason || null,
     notes: d.notes || null,
-    booking_code: d.booking_code ?? '',
     play_time: d.play_time ?? null,
     winners: d.winners ?? null,
     hints: d.hints ?? null,

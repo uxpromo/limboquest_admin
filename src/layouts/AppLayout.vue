@@ -1,19 +1,14 @@
 <template>
   <FLayout class="app-layout" ref="layoutRef" :mobileTopbar="false">
     <FLayoutHeader class="app-layout__header">
-      <section
-        class="app-layout__header-left"
-        :class="{ 'app-layout__header-left--collapsed': isMobile || isLeftSidebarColumnCollapsed }"
-      >
+      <section class="app-layout__header-left"
+        :class="{ 'app-layout__header-left--collapsed': isMobile || isLeftSidebarColumnCollapsed }">
         <Logo :show-text="!isLeftSidebarColumnCollapsed" />
         <FLayoutSidebarToggleButton v-if="isDesktop && !isLeftSidebarColumnCollapsed" side="left" :size="24" />
       </section>
       <div class="app-layout__header-right">
-        <FLayoutSidebarToggleButton
-          v-if="isMobile || (isDesktop && isLeftSidebarColumnCollapsed)"
-          side="left"
-          :size="24"
-        />
+        <FLayoutSidebarToggleButton v-if="isMobile || (isDesktop && isLeftSidebarColumnCollapsed)" side="left"
+          :size="24" />
         <div style="flex: 1"></div>
         <CurrentUserBlock v-if="isDesktop" />
       </div>
@@ -21,27 +16,14 @@
 
     <FLayoutSidebar side="left" class="app-layout__sidebar" :bordered="false">
       <template v-if="isDesktop">
-        <FMenu
-          class="fh-m-3"
-          :items="menuItems"
-          :collapsed="isDesktop && isLeftSidebarColumnCollapsed"
-          activation-strategy="manual"
-          :activation-callback="activationCallback"
-          vertical
-          @select="handleSelect"
-        />
+        <FMenu class="fh-m-3" :items="menuItems" :collapsed="isDesktop && isLeftSidebarColumnCollapsed"
+          activation-strategy="manual" :activation-callback="activationCallback" vertical @select="handleSelect" />
       </template>
       <template v-else>
         <FLayout style="height: 100dvh">
           <FLayoutContent class="fh-p-3">
-            <FMenu
-              :items="menuItems"
-              :collapsed="false"
-              activation-strategy="manual"
-              :activation-callback="activationCallback"
-              vertical
-              @select="handleSelect"
-            />
+            <FMenu :items="menuItems" :collapsed="false" activation-strategy="manual"
+              :activation-callback="activationCallback" vertical @select="handleSelect" />
           </FLayoutContent>
           <FLayoutFooter>
             <CurrentUserBlock />
@@ -64,7 +46,10 @@ import {
   PhDoorOpen,
   PhCalendarDots,
   PhTicket,
+  PhWarningOctagon,
+  PhCheckSquareOffset,
   PhGear,
+  PhChartLineUp,
 } from '@phosphor-icons/vue/compact'
 import {
   FMenu,
@@ -125,11 +110,33 @@ const menuItems = computed<MenuElementType[]>(() => [
   },
   {
     type: 'item',
+    value: 'analytics.index',
+    label: 'Аналитика',
+    icon: PhChartLineUp,
+    visible: true,
+  },
+  {
+    type: 'item',
+    value: 'incidents.index',
+    label: 'Инциденты',
+    icon: PhWarningOctagon,
+    visible: true,
+  },
+  {
+    type: 'item',
+    value: 'tasks.index',
+    label: 'Задачи',
+    icon: PhCheckSquareOffset,
+    visible: true,
+  },
+  {
+    type: 'item',
     value: 'settings.index',
     label: 'Настройки',
     icon: PhGear,
     visible: true,
   },
+
 ])
 
 const currentFirstPathSegment = computed(() => route.path.split('/').filter(Boolean)[0] ?? '')

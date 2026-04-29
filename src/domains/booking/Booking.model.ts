@@ -1,6 +1,7 @@
 import type { DayjsType } from '@finzor-ui/use-day-js'
 import type { BookingDTO } from './Booking.types'
 import dayjsCast from '@/domains/_base/casts/dayjsCast'
+import { BOOKING_STATUS_DEFAULT, isBookingStatus, type BookingStatus } from './BookingStatus'
 
 export default class Booking {
   readonly id!: number
@@ -10,7 +11,7 @@ export default class Booking {
   readonly phone!: string
   readonly email!: string | null
   readonly players_count!: number
-  readonly status!: string
+  readonly status!: BookingStatus
   readonly source_id!: string | null
   readonly pricing_snapshot!: unknown
   readonly total_price!: number
@@ -18,7 +19,6 @@ export default class Booking {
   readonly manual_discount!: number
   readonly manual_discount_reason!: string | null
   readonly notes!: string | null
-  readonly booking_code!: string
   readonly play_time!: number | null
   readonly winners!: boolean | null
   readonly hints!: number | null
@@ -35,7 +35,7 @@ export default class Booking {
     this.phone = dto.phone
     this.email = dto.email
     this.players_count = dto.players_count
-    this.status = dto.status
+    this.status = isBookingStatus(dto.status) ? dto.status : BOOKING_STATUS_DEFAULT
     this.source_id = dto.source_id
     this.pricing_snapshot = dto.pricing_snapshot
     this.total_price = dto.total_price
@@ -43,7 +43,6 @@ export default class Booking {
     this.manual_discount = dto.manual_discount
     this.manual_discount_reason = dto.manual_discount_reason
     this.notes = dto.notes
-    this.booking_code = dto.booking_code
     this.play_time = dto.play_time
     this.winners = dto.winners
     this.hints = dto.hints

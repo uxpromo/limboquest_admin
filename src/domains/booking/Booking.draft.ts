@@ -1,4 +1,5 @@
 import type Booking from './Booking.model'
+import { BOOKING_STATUS_DEFAULT, type BookingStatus } from './BookingStatus'
 
 export default class BookingDraft {
   readonly id: number | null = null
@@ -8,7 +9,7 @@ export default class BookingDraft {
   phone: string | null = null
   email: string | null = null
   players_count: number | null = null
-  status: string | null = 'pending'
+  status: BookingStatus | null = BOOKING_STATUS_DEFAULT
   source_id: string | null = null
   pricing_snapshot: unknown = null
   total_price: number | null = null
@@ -16,7 +17,6 @@ export default class BookingDraft {
   manual_discount: number | null = null
   manual_discount_reason: string | null = null
   notes: string | null = null
-  booking_code: string | null = null
   play_time: number | null = null
   winners: boolean | null = null
   hints: number | null = null
@@ -40,7 +40,6 @@ export default class BookingDraft {
       this.manual_discount = model.manual_discount
       this.manual_discount_reason = model.manual_discount_reason
       this.notes = model.notes
-      this.booking_code = model.booking_code
       this.play_time = model.play_time
       this.winners = model.winners
       this.hints = model.hints

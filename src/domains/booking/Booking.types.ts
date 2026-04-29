@@ -1,3 +1,5 @@
+import type { BookingStatus } from './BookingStatus'
+
 export interface BookingDTO {
   id: number
   quest_session_id: number
@@ -6,7 +8,7 @@ export interface BookingDTO {
   phone: string
   email: string | null
   players_count: number
-  status: string
+  status: BookingStatus
   source_id: string | null
   pricing_snapshot: unknown
   total_price: number
@@ -14,7 +16,6 @@ export interface BookingDTO {
   manual_discount: number
   manual_discount_reason: string | null
   notes: string | null
-  booking_code: string
   play_time: number | null
   winners: boolean | null
   hints: number | null
