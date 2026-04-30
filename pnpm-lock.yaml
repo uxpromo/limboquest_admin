@@ -122,6 +122,9 @@ importers:
       '@finzor-ui/textarea':
         specifier: ^0.1.31
         version: 0.1.31(dayjs@1.11.20)(pinia-orm@1.10.2(pinia@3.0.4(typescript@5.9.3)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+      '@finzor-ui/timepicker':
+        specifier: ^0.1.32
+        version: 0.1.32(@finzor-ui/locale@0.1.5(vue@3.5.33(typescript@5.9.3)))(dayjs@1.11.20)(pinia-orm@1.10.2(pinia@3.0.4(typescript@5.9.3)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
       '@finzor-ui/transitions':
         specifier: ^0.1.20
         version: 0.1.20(vue@3.5.33(typescript@5.9.3))
@@ -838,6 +841,12 @@ packages:
   '@finzor-ui/textarea@0.1.31':
     resolution: {integrity: sha512-/SLPqgOKdie2EfOVcSHqgfx7Cw35gNcxE3C0TqJ52RlnGG9vrPDG+aJOH5831J8hqRc7mr4OxF4VQDV/xf6LbQ==, tarball: https://npm.pkg.github.com/download/@finzor-ui/textarea/0.1.31/e2eb6c597a4ba515af4b118eb158839c7478a0a6}
     peerDependencies:
+      vue: ^3.5.0
+
+  '@finzor-ui/timepicker@0.1.32':
+    resolution: {integrity: sha512-sMbf1s+6cJt/k5RF4jZUzAqGrIJsNIQlzHDRB+nFDaY1cvt3aG0nYBK8juYDjHd28bYEqMk8bt5ubFGjv1ezAg==, tarball: https://npm.pkg.github.com/download/@finzor-ui/timepicker/0.1.32/6d49f4ac0a827867fa0f8d062509a269f40041c3}
+    peerDependencies:
+      dayjs: ^1.11.13
       vue: ^3.5.0
 
   '@finzor-ui/transitions@0.1.20':
@@ -3716,6 +3725,21 @@ snapshots:
       vue: 3.5.33(typescript@5.9.3)
     transitivePeerDependencies:
       - dayjs
+      - pinia-orm
+
+  '@finzor-ui/timepicker@0.1.32(@finzor-ui/locale@0.1.5(vue@3.5.33(typescript@5.9.3)))(dayjs@1.11.20)(pinia-orm@1.10.2(pinia@3.0.4(typescript@5.9.3)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
+    dependencies:
+      '@finzor-ui/basic-floating': 0.1.22(vue@3.5.33(typescript@5.9.3))
+      '@finzor-ui/button': 0.2.20(vue@3.5.33(typescript@5.9.3))
+      '@finzor-ui/common': 0.1.19
+      '@finzor-ui/form': 0.1.31(dayjs@1.11.20)(pinia-orm@1.10.2(pinia@3.0.4(typescript@5.9.3)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+      '@finzor-ui/use-day-js': 1.0.7(@finzor-ui/locale@0.1.5(vue@3.5.33(typescript@5.9.3)))(dayjs@1.11.20)(pinia-orm@1.10.2(pinia@3.0.4(typescript@5.9.3)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+      '@phosphor-icons/vue': 2.2.1(vue@3.5.33(typescript@5.9.3))
+      dayjs: 1.11.20
+      vue: 3.5.33(typescript@5.9.3)
+    transitivePeerDependencies:
+      - '@finzor-ui/locale'
+      - '@vue/composition-api'
       - pinia-orm
 
   '@finzor-ui/transitions@0.1.20(vue@3.5.33(typescript@5.9.3))':

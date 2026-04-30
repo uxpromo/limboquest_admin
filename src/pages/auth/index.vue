@@ -1,7 +1,7 @@
 <template>
   <FBlock class="auth-block">
     <FBlockSection>
-      <Logo />
+      <Logo variant="dark" />
     </FBlockSection>
     <FBlockSection class="auth-block__form-section">
       <FLoginForm v-if="currentSection === SECTION_LOGIN" />

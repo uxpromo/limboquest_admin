@@ -5,6 +5,7 @@ export interface QuestSessionDTO {
   starts_at: string
   duration: number | null
   pricing_rule_id: number
+  is_active: boolean
   prepayment_only: boolean
   notes: string | null
   created_at: string

@@ -14,6 +14,7 @@ export default class Quest {
   readonly players_base_limit!: number | null
   readonly surcharge_price!: number | null
   readonly base_price!: number | null
+  readonly pricing_rule_id!: number
   readonly location_id!: number
   readonly short_description!: string | null
   readonly full_description!: string | null
@@ -48,6 +49,7 @@ export default class Quest {
     this.players_base_limit = dto.players_base_limit
     this.surcharge_price = dto.surcharge_price
     this.base_price = dto.base_price
+    this.pricing_rule_id = dto.pricing_rule_id
     this.location_id = dto.location_id
     this.short_description = dto.short_description
     this.full_description = dto.full_description

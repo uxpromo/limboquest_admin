@@ -10,6 +10,7 @@ export interface QuestDTO {
   players_base_limit: number | null
   surcharge_price: number | null
   base_price: number | null
+  pricing_rule_id: number
   location_id: number
   short_description: string | null
   full_description: string | null

@@ -53,6 +53,7 @@
     "@finzor-ui/tabs": "^0.1.26",
     "@finzor-ui/tag": "^0.1.19",
     "@finzor-ui/textarea": "^0.1.31",
+    "@finzor-ui/timepicker": "^0.1.32",
     "@finzor-ui/transitions": "^0.1.20",
     "@finzor-ui/uploader": "^0.1.45",
     "@finzor-ui/use-day-js": "^1.0.7",

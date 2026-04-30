@@ -1,52 +1,50 @@
 <template>
   <FForm :model="formState" ref="formRef" :rules="rules" :loading="props.loading">
     <FFormItem label="Квест" name="quest_id">
-      <FSelect
-        v-model:value="formState.quest_id"
-        wide
-        :options="questOptions"
-        placeholder="Выберите квест"
-        allow-clear
-      />
+      <QuestSelect v-model:value="formState.quest_id" clearable />
     </FFormItem>
     <FFormItem label="Начало" name="starts_at">
-      <FInput v-model:value="formState.starts_at" type="datetime-local" wide />
+      <FSpace compact :wide="false">
+        <FDatepicker v-model:value="startsAtDateValue" />
+        <FTimepicker v-model:value="startsAtTimeValue" />
+      </FSpace>
     </FFormItem>
     <FFormItem label="Длительность (мин)" name="duration">
-      <FInput v-model:value="formState.duration" type="number" wide :min="0" />
+      <FInputNumber v-model:value="formState.duration" :min="0" />
     </FFormItem>
     <FFormItem label="Правило цен" name="pricing_rule_id">
-      <PricingRuleSelector v-model:value="formState.pricing_rule_id" />
+      <PricingRuleSelect v-model:value="formState.pricing_rule_id" />
+    </FFormItem>
+    <FFormItem label="Сеанс активен" name="is_active">
+      <FSwitch v-model:checked="formState.is_active" />
     </FFormItem>
     <FFormItem label="Только предоплата" name="prepayment_only">
       <FSwitch v-model:checked="formState.prepayment_only" />
     </FFormItem>
     <FFormItem label="Заметки" name="notes">
-      <FTextarea v-model:value="formState.notes" wide />
+      <FRichEditor v-model:value="formState.notes" placeholder="Введите текст..." toolbar-commands="standard" />
     </FFormItem>
   </FForm>
 </template>
 
 <script setup lang="ts">
 import { QuestSessionDraft } from '@/domains/quest_session'
-import { ref, useTemplateRef, watch, computed } from 'vue'
+import { computed, ref, useTemplateRef, watch } from 'vue'
 import { FForm, FFormItem, Rule, type FFormInstanceType } from '@finzor-ui/form'
-import FInput from '@finzor-ui/input'
-import FTextarea from '@finzor-ui/textarea'
+import { FInputNumber } from '@finzor-ui/input'
 import FSwitch from '@finzor-ui/switch'
-import FSelect from '@finzor-ui/select'
+import { FDatepicker } from '@finzor-ui/datepicker'
+import { FTimepicker } from '@finzor-ui/timepicker'
+import { useDayJs, type DayjsType } from '@finzor-ui/use-day-js'
+import FRichEditor from '@finzor-ui/rich-editor'
 import type QuestSession from '@/domains/quest_session/QuestSession.model'
-import { useQuestListQuery } from '@/domains/quest'
-import PricingRuleSelector from '../pricing_rules/PricingRuleSelector.vue'
+import QuestSelect from '../quests/QuestSelect.vue'
+import PricingRuleSelect from '../pricing_rules/PricingRuleSelect.vue'
+import FSpace from '@finzor-ui/space'
 
 const formState = ref<QuestSessionDraft>(new QuestSessionDraft())
 const formRef = useTemplateRef<FFormInstanceType>('formRef')
-
-const { data: questsData } = useQuestListQuery()
-const questOptions = computed(() => {
-  const list = questsData.value ?? []
-  return list.map((q) => ({ label: q.title || `#${q.id}`, value: q.id }))
-})
+const dayjs = useDayJs()
 
 defineOptions({
   name: 'QuestSessionForm',
@@ -72,6 +70,64 @@ watch(
   },
   { immediate: true },
 )
+
+const getStartsAtParts = () => {
+  if (!formState.value.starts_at) {
+    return {
+      date: null as string | null,
+      time: null as string | null,
+    }
+  }
+
+  const [datePart, timePartRaw] = formState.value.starts_at.split('T')
+  const timePart = timePartRaw?.slice(0, 5) ?? null
+
+  if (!datePart || !timePart) {
+    return {
+      date: null as string | null,
+      time: null as string | null,
+    }
+  }
+
+  return {
+    date: datePart,
+    time: timePart,
+  }
+}
+
+const startsAtDateValue = computed<DayjsType | null>({
+  get: () => {
+    const { date } = getStartsAtParts()
+    if (!date) return null
+    return dayjs(date, 'YYYY-MM-DD')
+  },
+  set: (value) => {
+    if (!value) {
+      formState.value.starts_at = null
+      return
+    }
+
+    const { time } = getStartsAtParts()
+    formState.value.starts_at = `${value.format('YYYY-MM-DD')}T${time ?? '00:00'}`
+  },
+})
+
+const startsAtTimeValue = computed<DayjsType | null>({
+  get: () => {
+    const { time } = getStartsAtParts()
+    if (!time) return null
+    return dayjs(`2000-01-01T${time}`)
+  },
+  set: (value) => {
+    if (!value) {
+      formState.value.starts_at = null
+      return
+    }
+
+    const { date } = getStartsAtParts()
+    formState.value.starts_at = `${date ?? dayjs().format('YYYY-MM-DD')}T${value.format('HH:mm')}`
+  },
+})
 
 const rules = {
   quest_id: Rule.custom({
@@ -99,6 +155,7 @@ const rules = {
     },
     message: 'Введите неотрицательное число',
   }),
+  is_active: Rule.boolean().required('Укажите активность'),
   prepayment_only: Rule.boolean().required(),
 }
 
@@ -111,6 +168,7 @@ const validate = async () => {
     starts_at: draft.starts_at ?? '',
     duration: draft.duration ?? null,
     pricing_rule_id: draft.pricing_rule_id ?? 0,
+    is_active: draft.is_active,
     prepayment_only: draft.prepayment_only,
     notes: draft.notes,
   }

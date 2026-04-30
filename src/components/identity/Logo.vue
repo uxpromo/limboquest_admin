@@ -1,7 +1,7 @@
 <template>
-  <div class="logo">
-    <LogoSymbol v-if="props.showSymbol" />
-    <LogoText v-if="props.showText" />
+  <div :class="['logo', `logo--${props.variant}`]">
+    <LogoSymbol v-if="props.showSymbol" :variant="props.variant" />
+    <LogoText v-if="props.showText" :variant="props.variant" />
   </div>
 </template>
 
@@ -16,10 +16,12 @@ const props = withDefaults(
   defineProps<{
     showText?: boolean
     showSymbol?: boolean
+    variant?: 'dark' | 'lite'
   }>(),
   {
     showText: true,
     showSymbol: true,
+    variant: 'lite',
   },
 )
 </script>
@@ -29,8 +31,15 @@ const props = withDefaults(
   display: flex;
   flex-direction: row;
   gap: 16px;
-  color: var(--f-color-white);
   align-items: center;
   max-width: 100%;
+
+  &--lite {
+    color: var(--f-color-white);
+  }
+
+  &--dark {
+    color: var(--f-color-black, #111827);
+  }
 }
 </style>

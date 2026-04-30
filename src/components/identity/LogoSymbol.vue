@@ -5,7 +5,7 @@
     height="42"
     fill="currentColor"
     viewBox="0 0 38 42"
-    class="logo__symbol"
+    :class="['logo__symbol', `logo__symbol--${props.variant}`]"
   >
     <path
       fill-rule="evenodd"
@@ -16,9 +16,28 @@
 </template>
 
 <script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    variant?: 'dark' | 'lite'
+  }>(),
+  {
+    variant: 'lite',
+  },
+)
+
 defineOptions({
   name: 'LogoSymbol',
 })
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.logo__symbol {
+  &--lite {
+    color: var(--f-color-white);
+  }
+
+  &--dark {
+    color: var(--f-color-black, #111827);
+  }
+}
+</style>

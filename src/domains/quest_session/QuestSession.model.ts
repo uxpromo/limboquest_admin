@@ -9,6 +9,7 @@ export default class QuestSession {
   readonly starts_at!: DayjsType
   readonly duration!: number | null
   readonly pricing_rule_id!: number
+  readonly is_active!: boolean
   readonly prepayment_only!: boolean
   readonly notes!: string | null
   readonly created_at!: DayjsType
@@ -21,6 +22,7 @@ export default class QuestSession {
     this.starts_at = dayjsCast(dto.starts_at)
     this.duration = dto.duration
     this.pricing_rule_id = dto.pricing_rule_id
+    this.is_active = dto.is_active
     this.prepayment_only = dto.prepayment_only
     this.notes = dto.notes
     this.created_at = dayjsCast(dto.created_at)

@@ -9,6 +9,7 @@ export default class QuestSessionDraft {
   starts_at: string | null = null
   duration: number | null = null
   pricing_rule_id: number | null = null
+  is_active: boolean = true
   prepayment_only: boolean = false
   notes: string | null = null
 
@@ -19,6 +20,7 @@ export default class QuestSessionDraft {
       this.starts_at = typeof model.starts_at === 'string' ? model.starts_at : (model.starts_at as { format: (f: string) => string }).format('YYYY-MM-DDTHH:mm')
       this.duration = model.duration
       this.pricing_rule_id = model.pricing_rule_id
+      this.is_active = model.is_active
       this.prepayment_only = model.prepayment_only
       this.notes = model.notes
     }

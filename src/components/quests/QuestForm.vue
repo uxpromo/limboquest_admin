@@ -52,6 +52,11 @@
 
             <h4>Ценообразование</h4>
             <FFields class="fh-mb-4">
+              <FFieldsItem label="Правило цен по умолчанию">
+                <FFormItem name="pricing_rule_id">
+                  <PricingRuleSelect v-model:value="formState.pricing_rule_id" />
+                </FFormItem>
+              </FFieldsItem>
               <FFieldsItem label="Количество игроков">
                 <FFormItem :name="['players_min', 'players_max']">
                   <FSpace compact>
@@ -198,6 +203,7 @@ import { useLocationListQuery } from '@/domains/location'
 import QuestCard from './QuestCard.vue'
 import { FTransitionCollapse } from '@finzor-ui/transitions'
 import { FTabs, FTab } from '@finzor-ui/tabs'
+import PricingRuleSelect from '@/components/pricing_rules/PricingRuleSelect.vue'
 
 const formState = ref<QuestDraft>(new QuestDraft())
 const formRef = useTemplateRef<FFormInstanceType>('formRef')
@@ -253,6 +259,14 @@ const rules = {
     },
     message: 'Выберите локацию',
   }),
+  pricing_rule_id: Rule.custom({
+    fn: (value) => {
+      if (value === null || value === undefined || value === '') return false
+      const num = Number(value)
+      return !Number.isNaN(num) && num > 0
+    },
+    message: 'Выберите правило цен по умолчанию',
+  }),
   base_price: optionalNumberMin0,
   playtime: optionalNumberMin0,
   players_min: optionalNumberMin0,
@@ -288,6 +302,7 @@ const validate = async () => {
     players_base_limit: draft.players_base_limit ?? null,
     surcharge_price: draft.surcharge_price ?? 0,
     base_price: draft.base_price ?? 0,
+    pricing_rule_id: draft.pricing_rule_id ?? 0,
     location_id: draft.location_id ?? 0,
     short_description: draft.short_description,
     full_description: draft.full_description,

@@ -16,9 +16,6 @@ export function createLocaleManager() {
     .setFallbackLocale('en')
 }
 
-/**
- * Возвращает функцию для установки менеджера локализации в Vue приложение
- */
 export function getLocaleManagerPlugin() {
   const localeManager = createLocaleManager()
   return installLocaleManager(localeManager)

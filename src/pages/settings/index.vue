@@ -38,7 +38,12 @@ import {
 } from '@finzor-ui/menu'
 import { computed, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { PhUsers, PhCurrencyCircleDollar, PhMapPinSimpleArea } from '@phosphor-icons/vue/compact'
+import {
+  PhUsers,
+  PhCurrencyCircleDollar,
+  PhMapPinSimpleArea,
+  PhCalendarDots,
+} from '@phosphor-icons/vue/compact'
 
 defineOptions({
   name: 'SettingsIndex',
@@ -70,6 +75,13 @@ const menuItems = computed<MenuElementType[]>(() => [
     value: 'settings.locations.index',
     label: 'Локации',
     icon: PhMapPinSimpleArea,
+    visible: true,
+  },
+  {
+    type: 'item',
+    value: 'settings.quest_session_templates.index',
+    label: 'Шаблоны сеансов',
+    icon: PhCalendarDots,
     visible: true,
   },
 ])

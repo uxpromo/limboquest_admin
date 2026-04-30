@@ -4,12 +4,12 @@
     :loading="composedLoading"
     :placeholder="props.placeholder"
     v-model:value="computedValue"
-    :options="pricingRuleOptions"
+    :options="questOptions"
     :wide="props.wide"
     :clearable="props.clearable"
   >
     <template #option-label="{ label }">
-      <div class="pricing-rule-selector__option-label">
+      <div class="quest-select__option-label">
         {{ label }}
       </div>
     </template>
@@ -19,10 +19,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import FSelect from '@finzor-ui/select'
-import { usePricingRuleListQuery } from '@/domains/pricing_rule'
+import { useQuestListQuery } from '@/domains/quest'
 
 defineOptions({
-  name: 'PricingRuleSelector',
+  name: 'QuestSelect',
 })
 
 const props = withDefaults(
@@ -38,7 +38,7 @@ const props = withDefaults(
     value: null,
     multiple: false,
     loading: undefined,
-    placeholder: 'Выберите правило цен',
+    placeholder: 'Выберите квест',
     wide: true,
     clearable: false,
   },
@@ -48,7 +48,7 @@ const emit = defineEmits<{
   (e: 'update:value', value: number | number[] | null): void
 }>()
 
-const { isLoading, data } = usePricingRuleListQuery()
+const { isLoading, data } = useQuestListQuery()
 
 const composedLoading = computed(() => {
   return isLoading.value || props.loading
@@ -63,12 +63,11 @@ const computedValue = computed<number | number[] | null>({
   },
 })
 
-const pricingRuleOptions = computed(() => {
+const questOptions = computed(() => {
   const list = data.value ?? []
-  return list.map((r) => ({
-    label: r.name || `#${r.id}`,
-    value: r.id,
+  return list.map((q) => ({
+    label: q.title || `#${q.id}`,
+    value: q.id,
   }))
 })
 </script>
-

@@ -88,23 +88,17 @@ watch(
 const rules = {
   short_address: Rule.string('Введите краткий адрес').required('Краткий адрес обязателен'),
   address: Rule.string('Введите адрес').required('Адрес обязателен'),
-  latitude: Rule.custom({
-    fn: (value) => {
-      const num = Number(value)
-      if (value === null || value === undefined || value === '') return false
-      if (isNaN(num) || num < -90 || num > 90) return false
+  coordinates: Rule.custom({
+    fn: () => {
+      const { latitude, longitude } = formState.value
+      if (latitude === null || latitude === undefined) return false
+      if (longitude === null || longitude === undefined) return false
+      if (Number.isNaN(Number(latitude)) || Number.isNaN(Number(longitude))) return false
+      if (Number(latitude) < -90 || Number(latitude) > 90) return false
+      if (Number(longitude) < -180 || Number(longitude) > 180) return false
       return true
     },
-    message: 'Введите корректную широту (-90 до 90)',
-  }),
-  longitude: Rule.custom({
-    fn: (value) => {
-      const num = Number(value)
-      if (value === null || value === undefined || value === '') return false
-      if (isNaN(num) || num < -180 || num > 180) return false
-      return true
-    },
-    message: 'Введите корректную долготу (-180 до 180)',
+    message: 'Укажите корректные координаты на карте',
   }),
   working_hours: Rule.string('Введите часы работы').required('Часы работы обязательны'),
   is_active: Rule.boolean().required('Укажите активность'),

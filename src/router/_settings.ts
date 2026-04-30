@@ -42,6 +42,26 @@ const routes = defineRoutes([
         name: 'settings.locations.edit',
         component: () => import('@/pages/settings/locations/edit.vue'),
       }),
+      defineRoute({
+        path: 'quest-session-templates',
+        name: 'settings.quest_session_templates.index',
+        component: () => import('@/pages/settings/session_templates/index.vue'),
+      }),
+      defineRoute({
+        path: 'quest-session-templates/create',
+        name: 'settings.quest_session_templates.create',
+        component: () => import('@/pages/settings/session_templates/create.vue'),
+      }),
+      defineRoute({
+        path: 'quest-session-templates/:id',
+        name: 'settings.quest_session_templates.view',
+        component: () => import('@/pages/settings/session_templates/view.vue'),
+      }),
+      defineRoute({
+        path: 'quest-session-templates/:id/edit',
+        name: 'settings.quest_session_templates.edit',
+        component: () => import('@/pages/settings/session_templates/edit.vue'),
+      }),
     ],
   }),
 ])

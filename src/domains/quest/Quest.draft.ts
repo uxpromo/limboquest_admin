@@ -14,6 +14,7 @@ export default class QuestDraft {
   players_base_limit: number | null = null
   surcharge_price: number | null = null
   base_price: number | null = null
+  pricing_rule_id: number | null = null
   location_id: number | null = null
   short_description: string | null = null
   full_description: string | null = null
@@ -46,6 +47,7 @@ export default class QuestDraft {
       this.players_base_limit = model.players_base_limit
       this.surcharge_price = model.surcharge_price
       this.base_price = model.base_price
+      this.pricing_rule_id = model.pricing_rule_id
       this.location_id = model.location_id
       this.short_description = model.short_description
       this.full_description = model.full_description
